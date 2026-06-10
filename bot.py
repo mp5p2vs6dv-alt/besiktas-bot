@@ -23,7 +23,9 @@ def check_and_post():
         feed = feedparser.parse("https://news.google.com/rss/search?q=Beşiktaş&hl=tr&gl=TR&ceid=TR:tr")
         for article in feed.entries[:1]:
             if article.link not in posted:
-                tweet = f"⚫⚪🦅 {article.title}\n\n#Beşiktaş #BJK\n\n{article.link}"
+                source = article.source.get('title', '') if hasattr(article, 'source') else ''
+tweet = f"⚫⚪🦅 {article.title}\n\n📰 {source}\n\n#Beşiktaş #BJK"
+
                 client.create_tweet(text=tweet[:280])
                 posted.add(article.link)
                 print(f"Paylaşıldı: {article.title}")
