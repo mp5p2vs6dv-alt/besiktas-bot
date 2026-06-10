@@ -24,8 +24,7 @@ def check_and_post():
         for article in feed.entries[:1]:
             if article.link not in posted:
                 source = article.source.get('title', '') if hasattr(article, 'source') else ''
-tweet = f"⚫⚪🦅 {article.title}\n\n📰 {source}\n\n#Beşiktaş #BJK"
-
+tweet = f"{article.title}\n\nKaynak: {source}\n\n#Besiktas #BJK"
                 client.create_tweet(text=tweet[:280])
                 posted.add(article.link)
                 print(f"Paylaşıldı: {article.title}")
