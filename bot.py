@@ -22,7 +22,7 @@ def check_and_post():
         feed = feedparser.parse("https://news.google.com/rss/search?q=Besiktas&hl=tr&gl=TR")
         for article in feed.entries[:1]:
             if article.link not in posted:
-                tweet = article.title + "\n\n#Besiktas #BJK"
+                tweet = article.title + "\n\n" + article.link + "\n\n#Besiktas #BJK"
                 client.create_tweet(text=tweet[:280])
                 posted.add(article.link)
                 print("Posted: " + article.title)
