@@ -18,16 +18,16 @@ client = tweepy.Client(
 posted = set()
 
 def check_and_post():
-    feed = feedparser.parse("https://news.google.com/rss/search?q=Besiktas&hl=tr&gl=TR")
+    feed = feedparser.parse("https://news.google.com/rss/search?q=Beşiktaş&hl=tr&gl=TR&ceid=TR:tr")
     for article in feed.entries[:5]:
         if article.link not in posted:
-            tweet = f"⚫⚪ {article.title}\n\n{article.link}"
+            tweet = f"⚫⚪🦅 {article.title}\n\n#Beşiktaş #BJK\n\n{article.link}"
             client.create_tweet(text=tweet[:280])
             posted.add(article.link)
-            print(f"Posted: {article.title}")
+            print(f"Paylaşıldı: {article.title}")
             time.sleep(10)
 
 while True:
     check_and_post()
-    print("Waiting 1 hour...")
+    print("1 saat bekleniyor...")
     time.sleep(3600)
