@@ -2,6 +2,7 @@ import feedparser
 import tweepy
 import time
 import os
+from datetime import datetime
 
 API_KEY = os.environ.get("API_KEY")
 API_SECRET = os.environ.get("API_SECRET")
@@ -18,16 +19,20 @@ client = tweepy.Client(
 posted = set()
 
 def check_and_post():
-    feed = feedparser.parse("https://news.google.com/rss/search?q=Beşiktaş&hl=tr&gl=TR&ceid=TR:tr")
-    for article in feed.entries[:5]:
-        if article.link not in posted:
-            tweet = f"⚫⚪🦅 {article.title}\n\n#Beşiktaş #BJK\n\n{article.link}"
-            client.create_tweet(text=tweet[:280])
-            posted.add(article.link)
-            print(f"Paylaşıldı: {article.title}")
-            time.sleep(10)
+    try:
+        feed = feedparser.parse("https://news.google.com/rss/search?q=Beşiktaş&hl=tr&gl=TR&ceid=TR:tr")
+        for article in feed.entries[:1]:
+            if article.link not in posted:
+                tweet = f"⚫⚪🦅 {article.title}\n\n#Beşiktaş #BJK\n\n{article.link}"
+                client.create_tweet(text=tweet[:280])
+                posted.add(article.link)
+                print(f"Paylaşıldı: {article.title}")
+    except Exception as e:
+        print(f"Hata: {e}")
 
 while True:
-    check_and_post()
-    print("1 saat bekleniyor...")
+    hour = datetime.utcnow().hour
+    # Post at 6am, 12pm, 6pm Istanbul time (UTC+3)
+    if hour in [3, 9, 15]:
+        check_and_post()
     time.sleep(3600)
